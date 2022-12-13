@@ -242,7 +242,7 @@ btnTarefa.addEventListener('click', (e) => {
     //Limpa o campo de digitar
     novaTarefa.value = '';
   }else {
-    alert('Por Gentileza, Informar uma tarefa com mais de 5 caractere')
+    alert('Por Gentileza, Informar uma tarefa com mais de 5 caracteres')
     
   }
   

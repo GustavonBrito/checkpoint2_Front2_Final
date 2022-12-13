@@ -1,8 +1,14 @@
+
 // Ainda está faltando:
 //Ambos os campos devem ser normalizados (ex: retirar espaços desnecessários);
 //Os campos “senha” e “repetir senha” devem possuir a mesma informação para serem considerados válidos;
 
 //Variaveis que ligam com o html e armazenam os dados
+
+onload = function(){
+    botao.style.backgroundColor = "grey"
+}
+let preencherCampos = document.querySelector("#preencherCampos")
 
 let botao = document.getElementById("salvar");
 botao.addEventListener("click", function(evento){
@@ -126,15 +132,19 @@ inputEmail.addEventListener("focus", function(){
     inputEmail.style.backgroundColor = "ligth gray"
 });
 
+let validacaoEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+
 inputEmail.addEventListener("keyup", function(){
 
     let informacao_2 = document.getElementById("infoEmail");
+
+    
 
 
     console.log("Saiu do Campo");
     inputEmail.style.backgroundColor = "light blue"
 
-    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(inputEmail.value)) {
+    if (validacaoEmail.test(inputEmail.value)) {
         //console.log("Sucesso"); "Sucesso na Validação"
         inputEmail.style.border = "solid 1.5px green";
         informacao_2.innerText = "";
@@ -158,6 +168,10 @@ inputEmail.addEventListener("keyup", function(){
 
 //Validando Password
 
+let validacaoSenha = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[$*&@#])[0-9a-zA-Z$*&@#]{8,}$/
+
+let validacaoSenhaRep = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[$*&@#])[0-9a-zA-Z$*&@#]{8,}$/
+
 let inputPassword = document.getElementById("password");
 
 inputPassword.addEventListener("focus", function(){
@@ -173,7 +187,7 @@ inputPassword.addEventListener("keyup", function(){
     console.log("Saiu do Campo");
     inputPassword.style.backgroundColor = "light blue"
 
-    if (inputPassword.value.length >=8) {
+    if (validacaoSenha.test(inputPassword.value)) {
         //console.log("Sucesso"); "Sucesso na Validação"
         inputPassword.style.border = "solid 1.5px green";
         informacao_3.innerText = "";
@@ -185,7 +199,7 @@ inputPassword.addEventListener("keyup", function(){
     else{
         //console.log("Falha"); "Falha na Validação"
         inputPassword.style.border = "solid 1.5px red";
-        informacao_3.innerText = "Informe no mínimo 8 caracteres";
+        informacao_3.innerText = "A senha requer uma letra maiúscula, um símbolo e 8 caracteres";
         informacao_3.style.color = "red";
         informacao_3.style.fontWeight = "bold";
 
@@ -196,9 +210,9 @@ inputPassword.addEventListener("keyup", function(){
 
 });
 
-/*/ Validando Repetição do Password
+// Validando Repetição do Password
 
-let inputPasswordRep = document.getElementById("password_1");
+let inputPasswordRep = document.getElementById("repeatPassword");
 
 inputPasswordRep.addEventListener("focus", function(){
     console.log("Clicou no campo");
@@ -207,13 +221,13 @@ inputPasswordRep.addEventListener("focus", function(){
 
 inputPasswordRep.addEventListener("keyup", function(){
 
-    let informacao_4 = document.getElementById("infoPassword_1");
+    let informacao_4 = document.getElementById("inforepeatPassword");
 
 
     console.log("Saiu do Campo");
     inputPasswordRep.style.backgroundColor = "light blue"
 
-    if (inputPasswordRep.value.length >=4) {
+    if (inputPasswordRep.value == inputPassword.value || inputPassword.value == inputPasswordRep.value) {
         //console.log("Sucesso"); "Sucesso na Validação"
         inputPasswordRep.style.border = "solid 1.5px green";
         informacao_4.innerText = "";
@@ -225,7 +239,7 @@ inputPasswordRep.addEventListener("keyup", function(){
     else{
         //console.log("Falha"); "Falha na Validação"
         inputPasswordRep.style.border = "solid 1.5px red";
-        informacao_4.innerText = "Informe no mínimo 8 caracteres";
+        informacao_4.innerText = "A senha deve ser igual a primeira senha informada";
         informacao_4.style.color = "red";
         informacao_4.style.fontWeight = "bold";
 
@@ -234,4 +248,168 @@ inputPasswordRep.addEventListener("keyup", function(){
 
     };
 
-});*/
+});
+
+function validarCampos(){
+    if (inputName.value.length < 4 || inputSobreNome.value.length < 4){
+        
+        preencherCampos.style.display = "block"
+        botao.style.backgroundColor = "grey"
+    }
+    else{
+        
+        preencherCampos.style.display = "none"
+        
+    }
+}
+
+function validarEmail(){
+    if(validacaoEmail.test(inputEmail.value))
+    {
+        
+        preencherCampos.style.display = "none"
+        
+    }
+    else
+    {
+        
+        preencherCampos.style.display = "block"
+        botao.style.backgroundColor = "grey"
+    }
+}
+
+function validarSenha(){
+    if(validacaoSenha.test(inputPassword.value) || validacaoSenhaRep.test(inputPasswordRep.value))
+    {
+        
+        preencherCampos.style.display = "none"
+        
+    }
+    else
+    {
+        
+        preencherCampos.style.display = "block"
+        botao.style.backgroundColor = "grey"
+    }
+
+}
+function validarSenhaRep(){
+    if(validacaoSenhaRep.test(inputPasswordRep.value) && validacaoEmail.test(inputEmail.value) && validacaoSenhaRep.test(inputPasswordRep.value))
+    {
+        
+        preencherCampos.style.display = "none"
+        botao.style.backgroundColor = "blue"
+    }
+    else
+    {
+        
+        preencherCampos.style.display = "block"
+        botao.style.backgroundColor = "grey"
+    }
+
+}
+
+let cadastro = document.querySelector("#cadastroRealizado")
+
+let loading = document.querySelector(".c-loader")
+
+botao.addEventListener("click", function(e){
+    e.preventDefault()
+    validarCampos()
+    validarEmail()
+    validarSenha()
+    if(validacaoSenhaRep.test(inputPasswordRep.value) && validacaoEmail.test(inputEmail.value) && validacaoSenhaRep.test(inputPasswordRep.value)){
+        cadastro.style.display = "block"
+        botao.style.display = "none"
+        loading.style.display = "block"
+        loading.style.marginTop = "10px"
+        setTimeout(() => {    
+            alert("Redirecionaremos voce para a pagina de Login")
+            
+            location.href = "index.html"
+        }, 2000);
+        
+           
+    }    
+})
+
+/* let input = document.querySelector("input")
+
+input.addEventListener("keydown",function(){
+    if (inputEmail.value == "" || inputName.value.length == "" || inputSobreNome.value == "" || inputPassword.value == "" || inputPasswordRep.value == ""){
+        botao.style.backgroundColor = "red"
+        }
+    else{
+            botao.style.backgroundColor = "blue"
+        }
+}) */
+
+botao.addEventListener("click",function(e){
+    e.preventDefault()  
+    infosUsuario()  
+})
+
+function infosUsuario(){
+    let informaçõesUsuario = {
+        firstName : inputName.value,
+        lastName: inputSobreNome.value,
+        email: inputEmail.value,
+        password: inputPassword.value
+    }
+
+    let bodyJSON = JSON.stringify(informaçõesUsuario)
+    console.log(bodyJSON);
+    valorCampos(bodyJSON)
+}
+
+function valorCampos(JSON){
+    cadastroUsuario(JSON)
+}
+
+async function cadastroUsuario(infosUsuario){
+    let config = {
+        method: "POST",
+        headers:{
+            "Content-type": "application/json"
+        },
+        body: infosUsuario
+    }    
+    console.log(config);
+try{
+    let resposta = await fetch(`${baseURL()}/users`, config)
+        if(resposta.status == 201){
+            let response = await resposta.json()
+
+                loginSucesso(response)
+            
+        }
+        else{
+            throw resposta
+        }
+}
+catch (erro){
+        loginErro(erro)
+        console.log("deu erro");
+
+}
+}
+
+function loginSucesso(resposta) {
+    console.log(resposta.jwt);
+
+    //Salva o token no cliente/front end
+
+    sessionStorage.setItem("jwt", resposta.jwt)
+
+    //Direciona o usuário pra pagina de tarefas
+    /* location.href = "index.html" */
+}
+
+function loginErro(resposta){
+    if(resposta.status == 400 || resposta.status == 404){
+        console.log(resposta);
+        console.log("deu erro");
+    }
+}
+
+
